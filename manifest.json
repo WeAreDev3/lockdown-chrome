@@ -1,5 +1,12 @@
 {
     "manifest_version": 2,
     "name": "Lockdown for Chrome",
-    "version": "0.0"
+    "short_name": "Lockdown",
+    "description": "An awesome and secure password manager.",
+    "version": "0.0.0",
+    "icons": {
+        "16": "images/lockdown16.png",
+        "48": "images/lockdown48.png",
+        "128": "images/lockdown128.png"
+    }
 }

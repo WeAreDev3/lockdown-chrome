@@ -8,5 +8,13 @@
         "16": "images/lockdown16.png",
         "48": "images/lockdown48.png",
         "128": "images/lockdown128.png"
+    },
+    "browser_action": {
+        "default_icon": {
+            "19": "images/lockdown19.png",
+            "38": "images/lockdown38.png" 
+        },
+        "default_title": "Lockdown",
+        "default_popup": "popup.html"
     }
 }

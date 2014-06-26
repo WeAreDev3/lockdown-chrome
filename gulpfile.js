@@ -14,7 +14,7 @@ var gulp = require('gulp'),
         js: 'extension/js',
         css: 'extension/css',
         images: 'extension/images/*.png',
-        views: 'extension/views/*',
+        views: 'extension/views/*.html',
         build: 'build',
         packages: 'packages',
         manifest: require('./extension/manifest.json')
@@ -65,16 +65,23 @@ gulp.task('bower-files', function() {
     bowerFiles().pipe(gulp.dest(config.build));
 });
 
-// Compress static images
-gulp.task('statics', function() {
-    return gulp.src([config.views, path.join(config.ext, 'manifest.json')])
+// Copy static files
+gulp.task('html', function() {
+    return gulp.src(config.views)
+        .pipe(gulp.dest(config.build));
+});
+
+gulp.task('statics', ['html'], function() {
+    return gulp.src('manifest.json')
         .pipe(gulp.dest(config.build));
 });
 
 // Rerun the task when a file changes
 gulp.task('watch', function() {
-    gulp.watch(config.js, ['js']);
+    gulp.watch(config.js + '/**/*.js', ['js']);
+    gulp.watch(config.css + '**/*.css', ['css']);
     gulp.watch(config.images, ['images']);
+    gulp.watch(config.views, ['html']);
 });
 
 // builds the extension
@@ -85,3 +92,5 @@ gulp.task('pack', ['build'], function() {
         .pipe(zip(config.manifest.name + ' [' + config.manifest.version + '].zip'))
         .pipe(gulp.dest(config.packages));
 });
+
+gulp.task('default', ['build', 'watch']);

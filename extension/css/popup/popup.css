@@ -1,4 +1,14 @@
+.chrome-bootstrap .frame .view {
+    -webkit-margin-start: 130px;
+}
+.chrome-bootstrap .frame .navigation {
+    width: 130px;
+}
 body {
     width: 400px;
     height: 450px;
+}
+form label {
+    display: block;
+    margin: 10px 0;
 }

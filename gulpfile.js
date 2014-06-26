@@ -79,7 +79,7 @@ gulp.task('statics', ['html'], function() {
 // Rerun the task when a file changes
 gulp.task('watch', function() {
     gulp.watch(config.js + '/**/*.js', ['js']);
-    gulp.watch(config.css + '**/*.css', ['css']);
+    gulp.watch(config.css + '/**/*.css', ['css']);
     gulp.watch(config.images, ['images']);
     gulp.watch(config.views, ['html']);
 });

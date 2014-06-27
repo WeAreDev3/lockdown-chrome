@@ -2,7 +2,9 @@
   "name": "lockdown-for-chrome",
   "version": "0.0.0",
   "dependencies": {
-    "angular": "^1.2.19"
+    "angular": "^1.2.19",
+    "angular-route": "^1.2.19",
+    "sjcl": "^1.0.0"
     },
   "devDependencies": {}
 }

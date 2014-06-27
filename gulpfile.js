@@ -5,6 +5,7 @@ var gulp = require('gulp'),
     concat = require('gulp-concat'),
     bowerFiles = require('gulp-bower-files'),
     zip = require('gulp-zip'),
+    gutil = require('gulp-util'),
 
     fs = require('fs'),
     path = require('path'),
@@ -15,6 +16,7 @@ var gulp = require('gulp'),
         css: 'extension/css',
         images: 'extension/images/*.png',
         views: 'extension/views/*.html',
+        partials: 'extension/partials/*.html',
         build: 'build',
         packages: 'packages',
         manifest: require('./extension/manifest.json')
@@ -35,7 +37,8 @@ function getFolders(dir) {
 gulp.task('js', function() {
     return es.concat.apply(null, getFolders(config.js).map(function(folder) {
         return gulp.src(path.join(config.js, folder, '*.js'))
-            .pipe(uglify())
+            .pipe(uglify()
+                .on('error', gutil.log))
             .pipe(concat(folder + '.js'))
             .pipe(gulp.dest(config.build));
     }));
@@ -51,13 +54,12 @@ gulp.task('css', function() {
 });
 
 
-// Compress static images
+// Compress images
 gulp.task('images', function() {
     return gulp.src(config.images)
-    // Pass in options to the task
-    .pipe(imagemin({
-        optimizationLevel: 5
-    }))
+        .pipe(imagemin({
+            optimizationLevel: 5
+        }))
         .pipe(gulp.dest(path.join(config.build, 'images')));
 });
 
@@ -71,7 +73,12 @@ gulp.task('html', function() {
         .pipe(gulp.dest(config.build));
 });
 
-gulp.task('statics', ['html'], function() {
+gulp.task('partials', function() {
+    return gulp.src(config.partials)
+        .pipe(gulp.dest(config.build + '/partials'));
+});
+
+gulp.task('statics', ['html', 'partials'], function() {
     return gulp.src('manifest.json')
         .pipe(gulp.dest(config.build));
 });
@@ -82,6 +89,7 @@ gulp.task('watch', function() {
     gulp.watch(config.css + '/**/*.css', ['css']);
     gulp.watch(config.images, ['images']);
     gulp.watch(config.views, ['html']);
+    gulp.watch(config.partials, ['partials']);
 });
 
 // builds the extension

@@ -79,7 +79,7 @@ gulp.task('partials', function() {
 });
 
 gulp.task('statics', ['html', 'partials'], function() {
-    return gulp.src('manifest.json')
+    return gulp.src(config.ext + '/manifest.json')
         .pipe(gulp.dest(config.build));
 });
 

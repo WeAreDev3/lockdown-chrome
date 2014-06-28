@@ -75,11 +75,11 @@ gulp.task('html', function() {
 
 gulp.task('partials', function() {
     return gulp.src(config.partials)
-        .pipe(gulp.dest(config.build + '/partials'));
+        .pipe(gulp.dest(path.join(config.build, 'partials')));
 });
 
 gulp.task('statics', ['html', 'partials'], function() {
-    return gulp.src(config.ext + '/manifest.json')
+    return gulp.src(path.join(config.ext, 'manifest.json'))
         .pipe(gulp.dest(config.build));
 });
 

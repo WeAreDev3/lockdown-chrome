@@ -2,11 +2,11 @@
 <a href="#/signup">Sign up</a>
 <form ng-submit="submit()">
     <label>
-        <span ng-class="{shown: username!==''}">Username:</span>
+        <span ng-class="{shown: username}">Username:</span>
         <input type="text" placeholder="Username" ng-model="username" required>
     </label>
     <label>
-        <span ng-class="{shown: password!==''}">Password:</span>
+        <span ng-class="{shown: password}">Password:</span>
         <input type="password" placeholder="Password" ng-model="password" required>
     </label>
     <input type="submit">

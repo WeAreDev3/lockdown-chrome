@@ -1,14 +1,15 @@
 <form ng-submit="submit()">
     <label>
         <span ng-class="{shown: email!==''}">Email:</span>
-        <input type="text" placeholder="Email" spellcheck="false" ng-model="email">
+        <input type="email" placeholder="Email" spellcheck="false" ng-model="email" required>
     </label>
     <label>
         <span ng-class="{shown: username!==''}">Username:</span>
-        <input type="text" placeholder="Username" ng-model="username">
+        <input type="text" placeholder="Username" ng-model="username" required>
     </label>
     <label>
         <span ng-class="{shown: password!==''}">Password:</span>
-        <input type="password" placeholder="Password" ng-model="password">
+        <input type="password" placeholder="Password" ng-model="password" required>
     </label>
+    <input type="submit" style="display: none;">
 </form>

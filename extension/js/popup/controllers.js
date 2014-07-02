@@ -82,7 +82,7 @@ var lockdown = angular.module('lockdown', ['ngRoute', 'ld.navbar', 'ld.main'])
                 controller: 'SignUpController'
             });
             $routeProvider.otherwise({
-                redirectTo: '/signup'
+                redirectTo: '/signin'
             });
         }
     ]);

@@ -10,17 +10,17 @@ angular.module('ld.navbar', [])
 
 angular.module('ld.main', [])
     .value('baseUrl', 'http://localhost:3000')
-    .controller('SignInController', ['$scope', '$log', 'baseUrl',
-        function(scope, log) {
+    .controller('SignInController', ['$scope', '$http','$log', 'baseUrl',
+        function(scope, http, log, baseUrl) {
             scope.username = "";
             scope.password = "";
 
-            var getCreds = function(username) {
+            scope.submit = function(username) {
                 http({
                     method: 'GET',
-                    url: scope.baseUrl + '/signin',
+                    url: baseUrl + '/signin',
                     params: {
-                        username: username
+                        username: scope.username
                     }
                 })
                     .success(function(data, status, headers, config) {

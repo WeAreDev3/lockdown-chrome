@@ -70,7 +70,7 @@ angular.module('ld.main', [])
         }
     ]);
 
-var lockdown = angular.module('lockdown', ['ngRoute', 'ld.navbar', 'ld.main'])
+var lockdown = angular.module('lockdown', ['ngRoute', 'ngAnimate', 'ld.navbar', 'ld.main'])
     .config(['$routeProvider',
         function($routeProvider) {
             $routeProvider.when('/signin', {

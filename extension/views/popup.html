@@ -8,13 +8,7 @@
 </head>
 
 <body>
-    <nav ng-controller="NavbarRoute as nav">
-        <ul>
-            <li><a ng-class="{active: nav.isAt('/signin')}" href="#/signin">Sign In</a></li>
-            <li><a ng-class="{active: nav.isAt('/signup')}" href="#/signup">Sign Up</a></li>
-        </ul>
-    </nav>
-    
+    <header><img src="images/lockdown32.png" alt="Lockdown"><h1>Lockdown</h1></header>
     <div class="content" ng-view></div>
 
     <script src="sjcl/sjcl.js"></script>

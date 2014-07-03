@@ -1,38 +1,98 @@
-body {
-    width: 400px;
-    height: 450px;
+* {
+    box-sizing: border-box;
 }
 
-form label {
-    display: block;
-    margin: 10px 0;
+body {
+    margin: 50px;
+    background: #EEE;
+    color: #404040;
+    font-family: Roboto, sans-serif;
+    font-weight: 100;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+header img {
+    display: inline-block;
+}
+
+header h1 {
+    text-transform: uppercase;
+    font-weight: 100;
+    display: inline-block;
+    margin-top: 0;
+    cursor: default;
+}
+
+header h1 span {
+    font-weight: 900;
+}
+
+h2 {
+    font-weight: 300;
+    margin-top: 0;
+    display: inline-block;
+    cursor: default;
+}
+
+h2 + a {
+    text-decoration: none;
+    float: right;
+    color: inherit;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 8px;
+    border-radius: 2px;
+    font-size: 13px;
+    cursor: pointer;
+    background: #1E97FC;
+    color: #FFF;
 }
 
 form label span {
     display: block;
-    text-transform: uppercase;
-    font-weight: bold;
-    font-size: 10px;
+    /*text-transform: uppercase;*/
+    font-weight: 300;
+    font-size: 13px;
     opacity: 0;
     transition: opacity .25s;
+    margin: 8px 2px 2px;
+    color: #000;
 }
 
 form label span.shown {
     opacity: 1;
 }
 
-nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-nav ul li {
-    padding: 5px;
-    display: inline-block;
-}
-
-nav ul li a {
-    text-decoration: none;
+input[type="text"], input[type="password"] {
+    background: rgba(255,255,255,0.8);
+    border: none;
     outline: none;
+    padding: 8px;
+    margin: 0;
+    font-family: inherit;
+    width: 100%;
+    border: 1px solid transparent;
+    transition: .25s;
+    border-radius: 2px;
+}
+
+input[type="text"]:focus, input[type="password"]:focus {
+    border-color: rgba(0,0,0,0.8);
+}
+
+input[type="submit"] {
+    color: inherit;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 8px;
+    border-radius: 2px;
+    font-size: 13px;
+    cursor: pointer;
+    color: #FFF;
+    background: #2EA835;
+    border: none;
+    font-family: inherit;
+    margin: 20px 0 0;
+    width: 100%;
 }

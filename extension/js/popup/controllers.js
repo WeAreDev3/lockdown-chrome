@@ -39,14 +39,11 @@ angular.module('ld.main', [])
             scope.password = "";
 
             scope.submit = function() {
-                // 32 bits = 4 bytes, 8 * 4 bytes = 32 byte long salt
-                var salt = new Int32Array(8);
-                window.crypto.getRandomValues(salt);
-
                 var pbkdf2Opts = {
                     email: scope.email,
                     username: scope.username,
-                    salt: sjcl.codec.base64.fromBits(salt),
+                    // Each "word" is 4 bytes, so 8 would be 32 bytes
+                    salt: sjcl.random.randomWords(8),
                     iter: 1000,
                     keyLength: 512,
                     hash: null,
@@ -54,7 +51,12 @@ angular.module('ld.main', [])
 
                 var hash = sjcl.misc.pbkdf2(scope.password, pbkdf2Opts.salt, pbkdf2Opts.itr, pbkdf2Opts.keyLength);
                 pbkdf2Opts.hash = sjcl.codec.base64.fromBits(hash);
+
+                // Use base64 for easy storage of the salt
+                pbkdf2Opts.salt = sjcl.codec.base64.fromBits(pbkdf2Opts.salt);
+
                 log.log(pbkdf2Opts);
+
                 http({
                     method: 'POST',
                     url: baseUrl + '/users',

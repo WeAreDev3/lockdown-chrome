@@ -42,9 +42,12 @@ angular.module('ld.main', [])
                         .error(function(data, status, headers, config) {
                             log.log('BAD', arguments);
                         });
+                                scope.signin.$setValidity('info', true);
+                                scope.signin.$setValidity('info', false);
                     })
                     .error(function(data, status, headers, config) {
                         log.log(arguments);
+                        scope.signin.$setValidity('info', false);
                     });
             };
         }

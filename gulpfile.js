@@ -64,7 +64,11 @@ gulp.task('images', function() {
 });
 
 gulp.task('bower-files', function() {
-    bowerFiles().pipe(gulp.dest(config.build));
+    bowerFiles()
+        .pipe(gulp.dest(config.build));
+
+    gulp.src(path.join(config.ext, 'bower_components', 'angular', 'angular-csp.css'))
+        .pipe(gulp.dest(config.build));
 });
 
 // Copy static files

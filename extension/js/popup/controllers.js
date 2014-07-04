@@ -23,8 +23,25 @@ angular.module('ld.main', [])
                         username: scope.username
                     }
                 })
-                    .success(function(data, status, headers, config) {
-                        log.log(arguments);
+                    .success(function(pbkdf2Opts, status, headers, config) {
+                        log.log(pbkdf2Opts);
+                        var hash = sjcl.misc.pbkdf2(scope.password, pbkdf2Opts.salt, pbkdf2Opts.itr, pbkdf2Opts.keyLength);
+                        hash = sjcl.codec.base64.fromBits(hash);
+
+                        http({
+                            method: 'POST',
+                            url: baseUrl + '/signin',
+                            data: {
+                                username: scope.username,
+                                clientHash: hash
+                            }
+                        })
+                        .success(function(data) {
+                            log.log('GOOD', arguments);
+                        })
+                        .error(function(data, status, headers, config) {
+                            log.log('BAD', arguments);
+                        });
                     })
                     .error(function(data, status, headers, config) {
                         log.log(arguments);
@@ -46,11 +63,11 @@ angular.module('ld.main', [])
                     salt: sjcl.random.randomWords(8),
                     iter: 1000,
                     keyLength: 512,
-                    hash: null,
+                    clientHash: null,
                 };
 
                 var hash = sjcl.misc.pbkdf2(scope.password, pbkdf2Opts.salt, pbkdf2Opts.itr, pbkdf2Opts.keyLength);
-                pbkdf2Opts.hash = sjcl.codec.base64.fromBits(hash);
+                pbkdf2Opts.clientHash = sjcl.codec.base64.fromBits(hash);
 
                 // Use base64 for easy storage of the salt
                 pbkdf2Opts.salt = sjcl.codec.base64.fromBits(pbkdf2Opts.salt);

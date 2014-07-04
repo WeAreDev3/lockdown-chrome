@@ -1,11 +1,12 @@
 angular.module('ld.main', [])
     .value('baseUrl', 'http://localhost:3000')
-    .controller('SignInController', ['$scope', '$http','$log', 'baseUrl',
+    .controller('SignInController', ['$scope', '$http', '$log', 'baseUrl',
         function(scope, http, log, baseUrl) {
             scope.username = "";
             scope.password = "";
 
             scope.submit = function(username) {
+                // Get PBKDF2 parameters
                 http({
                     method: 'GET',
                     url: baseUrl + '/signin',
@@ -14,10 +15,10 @@ angular.module('ld.main', [])
                     }
                 })
                     .success(function(pbkdf2Opts, status, headers, config) {
-                        log.log(pbkdf2Opts);
                         var hash = sjcl.misc.pbkdf2(scope.password, sjcl.codec.base64.toBits(pbkdf2Opts.salt), pbkdf2Opts.itr, pbkdf2Opts.keyLength);
                         hash = sjcl.codec.base64.fromBits(hash);
 
+                        // Send hashed password and username for authentication
                         http({
                             method: 'POST',
                             url: baseUrl + '/signin',
@@ -26,14 +27,14 @@ angular.module('ld.main', [])
                                 clientHash: hash
                             }
                         })
-                        .success(function(data) {
-                            log.log('GOOD', arguments);
-                        })
-                        .error(function(data, status, headers, config) {
-                            log.log('BAD', arguments);
-                        });
+                            .success(function(data) {
+                                log.log('GOOD', arguments);
                                 scope.signin.$setValidity('info', true);
+                            })
+                            .error(function(data, status, headers, config) {
+                                log.log('BAD', arguments);
                                 scope.signin.$setValidity('info', false);
+                            });
                     })
                     .error(function(data, status, headers, config) {
                         log.log(arguments);

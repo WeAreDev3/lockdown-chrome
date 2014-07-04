@@ -78,6 +78,7 @@ angular.module('ld.main', [])
                     })
                     .error(function(data, status, headers, config) {
                         log.log(arguments);
+                        scope.signin.$setValidity('info', false);
                     });
             };
         }

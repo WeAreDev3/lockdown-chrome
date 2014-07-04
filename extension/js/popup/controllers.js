@@ -15,7 +15,7 @@ angular.module('ld.main', [])
                 })
                     .success(function(pbkdf2Opts, status, headers, config) {
                         log.log(pbkdf2Opts);
-                        var hash = sjcl.misc.pbkdf2(scope.password, pbkdf2Opts.salt, pbkdf2Opts.itr, pbkdf2Opts.keyLength);
+                        var hash = sjcl.misc.pbkdf2(scope.password, sjcl.codec.base64.toBits(pbkdf2Opts.salt), pbkdf2Opts.itr, pbkdf2Opts.keyLength);
                         hash = sjcl.codec.base64.fromBits(hash);
 
                         http({

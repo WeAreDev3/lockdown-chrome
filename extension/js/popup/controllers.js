@@ -1,13 +1,3 @@
-angular.module('ld.navbar', [])
-    .controller('NavbarRoute', ['$scope', '$location', '$log',
-        function(scope, loc, log) {
-            scope.isAt = function(where) {
-                log.log(where, loc.path());
-                return where === loc.path();
-            };
-        }
-    ]);
-
 angular.module('ld.main', [])
     .value('baseUrl', 'http://localhost:3000')
     .controller('SignInController', ['$scope', '$http','$log', 'baseUrl',
@@ -92,7 +82,7 @@ angular.module('ld.main', [])
         }
     ]);
 
-var lockdown = angular.module('lockdown', ['ngRoute', 'ngAnimate', 'ld.navbar', 'ld.main'])
+var lockdown = angular.module('lockdown', ['ngRoute', 'ngAnimate', 'ld.main'])
     .config(['$routeProvider',
         function($routeProvider) {
             $routeProvider.when('/signin', {

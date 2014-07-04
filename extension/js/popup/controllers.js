@@ -1,7 +1,12 @@
 angular.module('ld.main', [])
     .value('baseUrl', 'http://localhost:3000')
-    .controller('SignInController', ['$scope', '$http', '$log', 'baseUrl',
-        function(scope, http, log, baseUrl) {
+    .controller('MainController', ['$scope', '$http', '$location', '$log', 'baseUrl',
+        function(scope, http, loc, log, baseUrl) {
+            
+        }
+    ])
+    .controller('SignInController', ['$scope', '$http', '$location', '$log', 'baseUrl',
+        function(scope, http, loc, log, baseUrl) {
             scope.username = "";
             scope.password = "";
 
@@ -30,6 +35,7 @@ angular.module('ld.main', [])
                             .success(function(data) {
                                 log.log('GOOD', arguments);
                                 scope.signin.$setValidity('info', true);
+                                loc.path('/');
                             })
                             .error(function(data, status, headers, config) {
                                 log.log('BAD', arguments);
@@ -43,8 +49,8 @@ angular.module('ld.main', [])
             };
         }
     ])
-    .controller('SignUpController', ['$scope', '$http', '$log', 'baseUrl',
-        function(scope, http, log, baseUrl) {
+    .controller('SignUpController', ['$scope', '$http', '$location', '$log', 'baseUrl',
+        function(scope, http, loc, log, baseUrl) {
             scope.email = "";
             scope.username = "";
             scope.password = "";

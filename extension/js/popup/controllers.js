@@ -2,7 +2,7 @@ angular.module('ld.main', [])
     .value('baseUrl', 'http://localhost:3000')
     .controller('MainController', ['$scope', '$http', '$location', '$log', 'baseUrl',
         function(scope, http, loc, log, baseUrl) {
-            
+
         }
     ])
     .controller('SignInController', ['$scope', '$http', '$location', '$log', 'baseUrl',
@@ -93,6 +93,10 @@ angular.module('ld.main', [])
 var lockdown = angular.module('lockdown', ['ngRoute', 'ngAnimate', 'ld.main'])
     .config(['$routeProvider',
         function($routeProvider) {
+            $routeProvider.when('/', {
+                templateUrl: 'partials/main.html',
+                controller: 'MainController'
+            });
             $routeProvider.when('/signin', {
                 templateUrl: 'partials/signin.html',
                 controller: 'SignInController'
@@ -102,7 +106,7 @@ var lockdown = angular.module('lockdown', ['ngRoute', 'ngAnimate', 'ld.main'])
                 controller: 'SignUpController'
             });
             $routeProvider.otherwise({
-                redirectTo: '/signin'
+                redirectTo: '/'
             });
         }
     ]);

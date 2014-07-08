@@ -17,6 +17,10 @@
         "default_title": "Lockdown",
         "default_popup": "popup.html"
     },
+    "background": {
+        "scripts": ["bluebird/js/browser/bluebird.js", "bongo.js/dist/bongo.min.js", "background.js"],
+        "persistent": false
+    },
     "permissions": [
         "http://localhost:3000/*"
     ]

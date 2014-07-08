@@ -1,91 +1,87 @@
 angular.module('ld.main', [])
     .value('baseUrl', 'http://localhost:3000')
-    .controller('MainController', ['$scope', '$http', '$location', '$log', 'baseUrl',
-        function(scope, http, loc, log, baseUrl) {
+    .value('hashOpts', {
+        iterations: 5000,
+        keyLength: 512
+    }).factory('pbkdf2', ['hashOpts',
+        function(hashOpts) {
+            return function(password, salt) {
+                var hash = sjcl.misc.pbkdf2(password, salt, hashOpts.iterations, hashOpts.keyLength);
 
-        }
-    ])
-    .controller('SignInController', ['$scope', '$http', '$location', '$log', 'baseUrl',
-        function(scope, http, loc, log, baseUrl) {
-            scope.username = "";
-            scope.password = "";
-
-            scope.submit = function(username) {
-                // Get PBKDF2 parameters
-                http({
-                    method: 'GET',
-                    url: baseUrl + '/signin',
-                    params: {
-                        username: scope.username
-                    }
-                })
-                    .success(function(pbkdf2Opts, status, headers, config) {
-                        var hash = sjcl.misc.pbkdf2(scope.password, sjcl.codec.base64.toBits(pbkdf2Opts.salt), pbkdf2Opts.itr, pbkdf2Opts.keyLength);
-                        hash = sjcl.codec.base64.fromBits(hash);
-
-                        // Send hashed password and username for authentication
-                        http({
-                            method: 'POST',
-                            url: baseUrl + '/signin',
-                            data: {
-                                username: scope.username,
-                                clientHash: hash
-                            }
-                        })
-                            .success(function(data) {
-                                log.log('GOOD', arguments);
-                                scope.signin.$setValidity('info', true);
-                                loc.path('/');
-                            })
-                            .error(function(data, status, headers, config) {
-                                log.log('BAD', arguments);
-                                scope.signin.$setValidity('info', false);
-                            });
-                    })
-                    .error(function(data, status, headers, config) {
-                        log.log(arguments);
-                        scope.signin.$setValidity('info', false);
-                    });
+                return sjcl.codec.base64.fromBits(hash);
             };
         }
     ])
-    .controller('SignUpController', ['$scope', '$http', '$location', '$log', 'baseUrl',
+    .controller('MainController', ['$scope', '$http', '$location', '$log', 'baseUrl',
         function(scope, http, loc, log, baseUrl) {
+            var user = localStorage.getItem('user');
+
+            if (!user) {
+                return loc.path('/signin');
+            }
+            console.log('Found user', JSON.parse(user));
+
+            scope.user = JSON.parse(user);
+        }
+    ])
+    .controller('SignInController', ['$scope', '$http', '$location', '$log', 'baseUrl', 'pbkdf2',
+        function(scope, http, loc, log, baseUrl, pbkdf2) {
+            scope.username = "";
+            scope.password = "";
+            scope.message = "";
+
+            scope.submit = function() {
+                var hash = pbkdf2(scope.password, sjcl.hash.sha256.hash(scope.username.toLowerCase()));
+
+                // Send username and hashed password for authentication
+                http({
+                    method: 'POST',
+                    url: baseUrl + '/signin',
+                    data: {
+                        username: scope.username,
+                        clientHash: hash
+                    }
+                }).success(function(data) {
+                    log.log('GOOD', arguments);
+
+                    scope.message = '';
+                    scope.signin.$setValidity('info', true);
+
+                    localStorage.setItem('user', JSON.stringify(data));
+                    loc.path('/');
+                }).error(function(data) {
+                    log.log('BAD', arguments);
+
+                    scope.message = data.message;
+                    scope.signin.$setValidity('info', false);
+                });
+            };
+        }
+    ])
+    .controller('SignUpController', ['$scope', '$http', '$location', '$log', 'baseUrl', 'pbkdf2',
+        function(scope, http, loc, log, baseUrl, pbkdf2) {
             scope.email = "";
             scope.username = "";
             scope.password = "";
 
             scope.submit = function() {
-                var pbkdf2Opts = {
-                    email: scope.email,
-                    username: scope.username,
-                    // Each "word" is 4 bytes, so 8 would be 32 bytes
-                    salt: sjcl.random.randomWords(8),
-                    iter: 1000,
-                    keyLength: 512,
-                    clientHash: null,
-                };
-
-                var hash = sjcl.misc.pbkdf2(scope.password, pbkdf2Opts.salt, pbkdf2Opts.itr, pbkdf2Opts.keyLength);
-                pbkdf2Opts.clientHash = sjcl.codec.base64.fromBits(hash);
-
-                // Use base64 for easy storage of the salt
-                pbkdf2Opts.salt = sjcl.codec.base64.fromBits(pbkdf2Opts.salt);
-
-                log.log(pbkdf2Opts);
+                var hash = pbkdf2(scope.password, sjcl.hash.sha256.hash(scope.username.toLowerCase()));
 
                 http({
                     method: 'POST',
                     url: baseUrl + '/users',
-                    data: pbkdf2Opts
-                })
-                    .success(function(data, status, headers, config) {
-                        log.log(arguments);
-                    })
-                    .error(function(data, status, headers, config) {
-                        log.log(arguments);
-                        scope.signin.$setValidity('info', false);
-                    });
+                    data: {
+                        email: scope.email,
+                        username: scope.username,
+                        clientHash: hash
+                    }
+                }).success(function(data, status, headers, config) {
+                    log.log(arguments);
+                    scope.signup.$setValidity('info', true);
+                }).error(function(data, status, headers, config) {
+                    log.log(arguments);
+                    scope.signup.$setValidity('info', false);
+                });
             };
         }
     ]);

@@ -2,20 +2,20 @@
   "name": "lockdown-chrome",
   "version": "0.0.0",
   "repository": {
-      "type": "git", 
-      "url": "https://github.com/WeAreDev3/lockdown-chrome.git"
-    },
+    "type": "git",
+    "url": "https://github.com/WeAreDev3/lockdown-chrome.git"
+  },
   "dependencies": {},
   "devDependencies": {
+    "event-stream": "^3.1.5",
     "gulp": "^3.8.2",
-    "gulp-uglifyjs": "^0.3.0",
-    "gulp-imagemin": "^0.6.1",
     "gulp-concat": "^2.2.0",
     "gulp-cssmin": "^0.1.6",
-    "gulp-bower-files": "^0.2.5",
-    "gulp-zip": "^0.4.0",
+    "gulp-imagemin": "^0.6.1",
+    "gulp-uglifyjs": "^0.3.0",
     "gulp-util": "2.2.19",
-    "event-stream": "^3.1.5"
+    "gulp-zip": "^0.4.0",
+    "main-bower-files": "^2.4.0"
   },
   "engines": {
     "node": ">=0.8.0"

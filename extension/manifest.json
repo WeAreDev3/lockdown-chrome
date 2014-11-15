@@ -3,7 +3,7 @@
     "name": "Lockdown for Chrome",
     "short_name": "Lockdown",
     "description": "An awesome and secure password manager.",
-    "version": "0.0.0",
+    "version": "0.1.0",
     "icons": {
         "16": "images/lockdown16.png",
         "48": "images/lockdown48.png",
@@ -18,7 +18,7 @@
         "default_popup": "popup.html"
     },
     "background": {
-        "scripts": ["bluebird/js/browser/bluebird.js", "bongo.js/dist/bongo.min.js", "background.js"],
+        "scripts": ["js/lib/bluebird.js", "js/lib/bongo.min.js", "js/background.js"],
         "persistent": false
     },
     "permissions": [

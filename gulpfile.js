@@ -3,7 +3,7 @@ var gulp = require('gulp'),
     cssmin = require('gulp-cssmin'),
     imagemin = require('gulp-imagemin'),
     concat = require('gulp-concat'),
-    bowerFiles = require('gulp-bower-files'),
+    bowerFiles = require('main-bower-files'),
     zip = require('gulp-zip'),
     gutil = require('gulp-util'),
 
@@ -18,6 +18,10 @@ var gulp = require('gulp'),
         views: 'extension/views/*.html',
         partials: 'extension/partials/*.html',
         build: 'build',
+        build_js: 'build/js',
+        build_lib: 'build/js/lib',
+        build_css: 'build/css',
+        build_img: 'build/images',
         packages: 'packages',
         manifest: require('./extension/manifest.json')
     };
@@ -40,16 +44,17 @@ gulp.task('js', function() {
             .pipe(uglify()
                 .on('error', gutil.log))
             .pipe(concat(folder + '.js'))
-            .pipe(gulp.dest(config.build));
+            .pipe(gulp.dest(config.build_js));
     }));
 });
 
+// Minify CSS
 gulp.task('css', function() {
     return es.concat.apply(null, getFolders(config.css).map(function(folder) {
         return gulp.src(path.join(config.css, folder, '*.css'))
             .pipe(cssmin())
             .pipe(concat(folder + '.css'))
-            .pipe(gulp.dest(config.build));
+            .pipe(gulp.dest(config.build_css));
     }));
 });
 
@@ -60,15 +65,16 @@ gulp.task('images', function() {
         .pipe(imagemin({
             optimizationLevel: 5
         }))
-        .pipe(gulp.dest(path.join(config.build, 'images')));
+        .pipe(gulp.dest(config.build_img));
 });
 
+// Copy bower files
 gulp.task('bower-files', function() {
-    bowerFiles()
-        .pipe(gulp.dest(config.build));
+    gulp.src(bowerFiles())
+        .pipe(gulp.dest(config.build_lib));
 
     gulp.src(path.join(config.ext, 'bower_components', 'angular', 'angular-csp.css'))
-        .pipe(gulp.dest(config.build));
+        .pipe(gulp.dest(config.build_css));
 });
 
 // Copy static files
@@ -99,6 +105,7 @@ gulp.task('watch', function() {
 // builds the extension
 gulp.task('build', ['statics', 'js', 'css', 'images', 'bower-files']);
 
+// Packs the extension for uploading to the web store
 gulp.task('pack', ['build'], function() {
     return gulp.src(path.join(config.build, '**/*'))
         .pipe(zip(config.manifest.name + ' [' + config.manifest.version + '].zip'))
